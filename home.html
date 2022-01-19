@@ -1,0 +1,89 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.10.4/brython.js" integrity="sha512-Dr8IR/2fk/pBmngFLduWN5Ys/t7lcPxGgLCulHdTdgDrDRnGb+ANMxGXq+DKVN87jom+N3BrzzI476Pf98RReA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/brython/3.10.4/brython_stdlib.js" integrity="sha512-kMRN6F4Yq4sNLbPG2lH3EO9n776JHHZub+UWogDxVjh9uTnoVo3wtN/rnQD4C4/AZtqI2zQdvdouGAAxOGwNeA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Konversi Suhu</title>
+</head>
+<body onload="brython()">
+    <header>
+        <h1>Konversi Suhu</h1>
+    </header>
+        <select name="jenis-suhu" id="select">
+            <option value="celcius">Celcius</option>
+            <option value="fahrenheit">Fahrenheit</option>
+            <option value="kelvin">Kelvin</option>
+            <option value="reamur">Reamur</option>
+        </select>
+        <input type="text" id="suhu" placeholder="Masukkan angka...">
+        <button id="btn">Konversi</button>
+        <div id="output0"></div>
+        <div id="output1"></div>
+        <div id="output2"></div>
+        <script type="text/python">
+            from browser import document, console, alert
+
+            input = document['suhu']
+            button = document['btn']
+            output0 = document['output0']
+            output1 = document['output1']
+            output2 = document['output2']
+            select = document['select']
+
+            def getNum(x):
+                temp = x
+                try:
+                    temp = int(x)
+                except ValueError:
+                    temp = float(x)
+                finally:
+                    if temp != '' and type(temp) is str:
+                        alert('Harap masukkan angka')
+                        temp = ''
+                        input.value = temp
+                        return temp
+                    else:
+                        return temp
+
+            def formula(x, y):
+                if x == 'celcius':
+                    fahrenheit = 'Fahrenheit = ' + str(y * 1.8 + 32)
+                    kelvin = 'Kelvin = ' + str(y + 273)
+                    reamur = 'Reamur = ' + str(0.8 * y)
+                    return fahrenheit, kelvin, reamur
+                elif x == 'fahrenheit':
+                    celcius = 'Celcius = ' + str(5/9 * (y - 32))
+                    kelvin = 'Kelvin = ' + str(5/9 * (y - 32) + 273)
+                    reamur = 'Reamur = ' + (4/9 * (y - 32))
+                    return celcius, kelvin, reamur
+                elif x == 'kelvin':
+                    celcius = 'Celcius = ' + str(5/9 * (y - 32))
+                    fahrenheit = 'Fahrenheit = ' + str(5/9 * (y - 32) + 273)
+                    reamur = 'Reamur = ' + (4/9 * (y - 32))
+                    return celcius, fahrenheit, reamur
+                else :        
+                    return 0
+
+
+            def main(ev):
+                output2.textContent = select.value
+                num = getNum(input.value)
+                result = formula(select.value, num)
+                output0.textContent = result[0]
+                output1.textContent = result[1]
+                
+
+            def keyEnter(ev):
+                console.log(f"{ev.code}")
+                traceKey = f"{ev.code}"
+                if traceKey == 'Enter':
+                    main(0)
+
+            button.bind('click', main)
+            input.bind("keypress", keyEnter)
+
+        </script>
+</body>
+</html>
